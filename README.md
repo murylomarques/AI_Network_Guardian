@@ -6,25 +6,25 @@
 ---
 
 ## Sumário
-- Visão geral
-- Principais funcionalidades
-- Arquitetura
-- Fluxogramas
-- Modelos de IA
-- Decision Engine (Autopilot)
-- Estrutura do repositório
-- Banco de dados
-- API
-- Dashboard
-- Métricas e economia
-- Como rodar localmente
-- Roadmap
-- Segurança e auditoria
-- Licença
+- [Visão geral](#visao-geral)
+- [Principais funcionalidades](#principais-funcionalidades)
+- [Arquitetura](#arquitetura)
+- [Fluxogramas](#fluxogramas)
+- [Modelos de IA](#modelos-de-ia)
+- [Decision Engine](#decision-engine)
+- [Estrutura do repositório](#estrutura-do-repositorio)
+- [Banco de dados](#banco-de-dados)
+- [API](#api)
+- [Dashboard](#dashboard)
+- [Métricas e economia](#metricas-e-economia)
+- [Como rodar localmente](#como-rodar-localmente)
+- [Roadmap](#roadmap)
+- [Segurança e auditoria](#seguranca-e-auditoria)
+- [Licença](#licenca)
 
 ---
 
-## Visão geral
+## Visao geral
 
 No fluxo tradicional de ISP:
 
@@ -276,7 +276,7 @@ Todas decisões são auditadas.
 
 ---
 
-## Estrutura do repositório
+## Estrutura do repositorio
 
 ```
 ai-network-guardian/
@@ -342,7 +342,7 @@ Telas:
 
 ---
 
-## Métricas e economia
+## Metricas e economia
 
 KPIs:
 - Precision e Recall
@@ -405,7 +405,7 @@ npm run dev
 
 ---
 
-## Segurança e auditoria
+## Seguranca e auditoria
 - rate limit de acoes
 - modo simulacao
 - auditoria completa das decisoes
