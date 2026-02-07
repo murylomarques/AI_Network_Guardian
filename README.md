@@ -1,5 +1,5 @@
-# AI Network Guardian
-**Plataforma de IA para prever, diagnosticar e resolver falhas de conectividade — reduzindo custos operacionais e melhorando SLA.**
+﻿# AI Network Guardian
+**Plataforma de IA para prever, diagnosticar e resolver falhas de conectividade, reduzindo custos operacionais e melhorando SLA.**
 
 > O que este projeto faz: monitora telemetria e eventos de rede, detecta anomalias, classifica causa provável (massiva vs individual), prevê risco de falha (2h/6h/24h), recomenda ou executa ações (reboot, abrir incidente, agendar ou cancelar visita) e exibe tudo em um dashboard com métricas de economia operacional.
 
@@ -7,6 +7,8 @@
 
 ## Sumário
 - [Visão geral](#visao-geral)
+- [Problema que resolve](#problema-que-resolve)
+- [Status do projeto](#status-do-projeto)
 - [Principais funcionalidades](#principais-funcionalidades)
 - [Arquitetura](#arquitetura)
 - [Fluxogramas](#fluxogramas)
@@ -17,9 +19,17 @@
 - [API](#api)
 - [Dashboard](#dashboard)
 - [Métricas e economia](#metricas-e-economia)
+- [Requisitos e dependências](#requisitos-e-dependencias)
+- [Configuração](#configuracao)
 - [Como rodar localmente](#como-rodar-localmente)
+- [Testes e qualidade](#testes-e-qualidade)
+- [Observabilidade](#observabilidade)
+- [Segurança, privacidade e LGPD](#seguranca-privacidade-e-lgpd)
+- [Governança de modelos](#governanca-de-modelos)
+- [Deploy e operação](#deploy-e-operacao)
 - [Roadmap](#roadmap)
-- [Segurança e auditoria](#seguranca-e-auditoria)
+- [Contribuição](#contribuicao)
+- [Suporte e contato](#suporte-e-contato)
 - [Licença](#licenca)
 
 ---
@@ -28,57 +38,69 @@
 
 No fluxo tradicional de ISP:
 
-1. Cliente perde sinal  
-2. Cliente abre chamado  
-3. Agenda técnico  
+1. Cliente perde sinal
+2. Cliente abre chamado
+3. Agenda técnico
 4. Alto custo operacional
 
 O **AI Network Guardian** antecipa o problema:
 
-- detecta degradação antes da queda completa
-- separa queda massiva de problema individual
-- executa auto correção quando possível
-- comunica o cliente automaticamente
-- agenda visita apenas quando necessário
-- cancela visitas quando o problema normaliza
-- mede economia e melhora de SLA e MTTR
+- Detecta degradação antes da queda completa.
+- Separa queda massiva de problema individual.
+- Executa autocorreção quando possível.
+- Comunica o cliente automaticamente.
+- Agenda visita apenas quando necessário.
+- Cancela visitas quando o problema normaliza.
+- Mede economia e melhora de SLA e MTTR.
+
+---
+
+## Problema que resolve
+
+- Reduz visitas técnicas desnecessárias.
+- Diminui MTTR e melhora SLA percebido.
+- Aumenta capacidade do NOC sem inflar equipe.
+- Cria previsibilidade com risco de falha por janela.
+
+---
+
+## Status do projeto
+
+- Em desenvolvimento.
+- Escopo atual: POC funcional com pipeline de dados, modelos iniciais e dashboard.
+- Próximo marco: integração com sistemas reais de OSS/BSS.
 
 ---
 
 ## Principais funcionalidades
 
-### Monitoramento e Inteligência
-- Ingestão de dados em batch ou near real time:
-  - telemetria de sinal
-  - status de ONU ou modem
-  - eventos de rede
-  - histórico de chamados e OS
-  - contexto de região e vizinhos
-  - clima
+### Monitoramento e inteligência
 
-- Feature Store com agregações:
-  - janelas de 5, 15 e 60 minutos
-  - histórico diário e semanal
-
-- Detecção de anomalias
-- Classificação de causa provável
-- Previsão de risco de falha
+- Ingestão de dados em batch ou near real time.
+- Fontes: telemetria de sinal, status de ONU/modem, eventos de rede, histórico de chamados/OS, contexto de região e vizinhos, clima.
+- Feature Store com agregações em janelas de 5, 15 e 60 minutos, além de histórico diário e semanal.
+- Detecção de anomalias.
+- Classificação de causa provável.
+- Previsão de risco de falha.
 
 ### Ações automáticas
-- reboot controlado
-- abertura de incidente massivo
-- pausa de agendamentos em regiões afetadas
-- agendamento inteligente
-- notificação ao cliente
+
+- Reboot controlado quando elegível.
+- Abertura de incidente massivo.
+- Pausa de agendamentos em regiões afetadas.
+- Agendamento inteligente.
+- Notificação ao cliente.
 
 ### Operação e gestão
+
 Dashboard com:
-- fila de clientes em risco
-- heatmap por região
-- incidentes ativos
-- auditoria das decisões da IA
-- economia estimada
-- métricas de SLA e MTTR
+
+- Fila de clientes em risco.
+- Heatmap por região.
+- Incidentes ativos.
+- Auditoria das decisões da IA.
+- Economia estimada.
+- Métricas de SLA e MTTR.
 
 ---
 
@@ -162,6 +184,7 @@ sequenceDiagram
   ACT->>AUD: resultado
   AUD->>UI: atualiza dashboard
 ```
+
 ---
 
 ### 4) Arquitetura de componentes
@@ -230,18 +253,22 @@ flowchart LR
 ## Modelos de IA
 
 ### Detecção de anomalia
-- Isolation Forest
-- One Class SVM
+
+- Isolation Forest.
+- One Class SVM.
 
 Saída:
+
 ```
 anomaly_score
 ```
 
 ### Classificação
-- LightGBM ou XGBoost
+
+- LightGBM ou XGBoost.
 
 Classes:
+
 - MASSIVE_OUTAGE
 - CUSTOMER_PREMISES
 - EQUIPMENT_FAIL
@@ -249,7 +276,9 @@ Classes:
 - INTERMITTENT
 
 ### Previsão de risco
+
 Saídas:
+
 ```
 risk_2h
 risk_6h
@@ -261,18 +290,20 @@ risk_24h
 ## Decision Engine
 
 Decide baseado em:
-- resultados dos modelos
-- contexto do cliente
-- regras de segurança
-- custo esperado
+
+- Resultados dos modelos.
+- Contexto do cliente.
+- Regras de segurança.
+- Custo esperado.
 
 Exemplo:
-- massiva detectada → abrir incidente
-- individual → tentar reboot
-- estabilizou → cancelar OS
-- persistiu → agendar visita
 
-Todas decisões são auditadas.
+- Massiva detectada: abrir incidente.
+- Individual: tentar reboot.
+- Estabilizou: cancelar OS.
+- Persistiu: agendar visita.
+
+Todas as decisões são auditadas.
 
 ---
 
@@ -334,49 +365,78 @@ GET /metrics/kpis
 ## Dashboard
 
 Telas:
-- NOC Overview
-- Fila de risco
-- Dossie do cliente
-- KPIs e economia
-- Explainability
+
+- NOC Overview.
+- Fila de risco.
+- Dossiê do cliente.
+- KPIs e economia.
+- Explainability.
 
 ---
 
 ## Metricas e economia
 
 KPIs:
-- Precision e Recall
-- MTTR
-- SLA
-- OS evitadas
+
+- Precision e Recall.
+- MTTR.
+- SLA.
+- OS evitadas.
 
 Economia:
+
 ```
 economia = OS_evitadas * custo_medio_visita
 ```
 
 ---
 
+## Requisitos e dependencias
+
+- Docker.
+- Python 3.11.
+- Node 18.
+- Banco de dados: PostgreSQL ou MySQL.
+
+---
+
+## Configuracao
+
+Crie um `.env` na raiz com os valores necessários. Exemplo mínimo:
+
+```
+ENV=dev
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=ai_network_guardian
+DB_USER=postgres
+DB_PASSWORD=postgres
+REDIS_URL=redis://localhost:6379
+RABBITMQ_URL=amqp://guest:guest@localhost:5672
+MODEL_REGISTRY_PATH=/models
+NOTIFICATION_PROVIDER=mock
+```
+
+---
+
 ## Como rodar localmente
 
-Pré requisitos:
-- Docker
-- Python 3.11
-- Node 18
+Subir infra:
 
-### Subir infra
 ```
 docker compose up -d
 ```
 
-### API
+API:
+
 ```
 cd apps/api
 pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
-### Dashboard
+Dashboard:
+
 ```
 cd apps/dashboard
 npm install
@@ -385,32 +445,88 @@ npm run dev
 
 ---
 
-## Roadmap
+## Testes e qualidade
 
-### Fase 1
-- ingestao
-- feature store
-- anomalia
-- dashboard basico
-
-### Fase 2
-- previsao risco
-- explainability
-- economia estimada
-
-### Fase 3
-- integracoes reais
-- monitoramento de drift
-- otimizacao de agendamento
+- Testes unitários e de integração com `pytest`.
+- Linters e formatação: `ruff`, `black` e `isort`.
+- Cobertura mínima recomendada: 80%.
 
 ---
 
-## Seguranca e auditoria
-- rate limit de acoes
-- modo simulacao
-- auditoria completa das decisoes
+## Observabilidade
+
+- Logs estruturados com correlação por `trace_id` e `customer_id`.
+- Métricas no padrão Prometheus.
+- Alertas para aumento de risco agregado, falhas de ingestão e drift de modelo.
+
+---
+
+## Seguranca, privacidade e LGPD
+
+- Minimização de dados pessoais.
+- Pseudonimização de identificadores de cliente.
+- Criptografia em trânsito (TLS) e em repouso.
+- Controle de acesso por função (RBAC).
+- Retenção de dados com políticas por tipo de dado.
+- Trilhas de auditoria para decisões automatizadas.
+
+---
+
+## Governanca de modelos
+
+- Versionamento de modelos com validação antes de produção.
+- Monitoramento de drift e performance.
+- Rollback automático se o modelo degradar.
+- Registro de features e datasets usados no treino.
+
+---
+
+## Deploy e operacao
+
+- Ambientes: `dev`, `staging`, `prod`.
+- Pipeline CI/CD com testes e validações.
+- Infra como código em `infra/`.
+- Estratégia de rollout: canary ou blue/green.
+
+---
+
+## Roadmap
+
+### Fase 1
+
+- Ingestao.
+- Feature store.
+- Anomalia.
+- Dashboard básico.
+
+### Fase 2
+
+- Previsão de risco.
+- Explainability.
+- Economia estimada.
+
+### Fase 3
+
+- Integrações reais.
+- Monitoramento de drift.
+- Otimização de agendamento.
+
+---
+
+## Contribuicao
+
+- Abra uma issue descrevendo o problema ou proposta.
+- Envie um PR com testes e documentação atualizada.
+
+---
+
+## Suporte e contato
+
+- Email: suporte@empresa.com
+- Comercial: vendas@empresa.com
 
 ---
 
 ## Licenca
+
 MIT ou Apache 2.0
