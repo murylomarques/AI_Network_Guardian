@@ -1,12 +1,12 @@
-ï»¿ï»¿ï»¿# AI Network Guardian
+﻿﻿# AI Network Guardian
 **Plataforma de IA para prever, diagnosticar e resolver falhas de conectividade, reduzindo custos operacionais e melhorando SLA.**
 
-> O que este projeto faz: monitora telemetria e eventos de rede, detecta anomalias, classifica causa provÃ¡vel (massiva vs individual), prevÃª risco de falha (2h/6h/24h), recomenda ou executa aÃ§Ãµes (reboot, abrir incidente, agendar ou cancelar visita) e exibe tudo em um dashboard com mÃ©tricas de economia operacional.
+> O que este projeto faz: monitora telemetria e eventos de rede, detecta anomalias, classifica causa provável (massiva vs. individual), prevê risco de falha (2h/6h/24h), recomenda ou executa ações (reboot, abrir incidente, agendar ou cancelar visita) e exibe tudo em um dashboard com métricas de economia operacional.
 
 ---
 
-## SumÃ¡rio
-- [VisÃ£o geral](#visao-geral)
+## Sumário
+- [Visão geral](#visao-geral)
 - [Problema que resolve](#problema-que-resolve)
 - [Status do projeto](#status-do-projeto)
 - [Principais funcionalidades](#principais-funcionalidades)
@@ -14,100 +14,100 @@
 - [Fluxogramas](#fluxogramas)
 - [Modelos de IA](#modelos-de-ia)
 - [Decision Engine](#decision-engine)
-- [Estrutura do repositÃ³rio](#estrutura-do-repositorio)
+- [Estrutura do repositório](#estrutura-do-repositorio)
 - [Banco de dados](#banco-de-dados)
 - [API](#api)
 - [Dashboard](#dashboard)
-- [MÃ©tricas e economia](#metricas-e-economia)
+- [Métricas e economia](#metricas-e-economia)
 - [Outras alavancas de economia](#outras-alavancas-de-economia)
-- [Requisitos e dependÃªncias](#requisitos-e-dependencias)
-- [ConfiguraÃ§Ã£o](#configuracao)
+- [Requisitos e dependências](#requisitos-e-dependencias)
+- [Configuração](#configuracao)
 - [Como rodar localmente](#como-rodar-localmente)
 - [Testes e qualidade](#testes-e-qualidade)
 - [Observabilidade](#observabilidade)
-- [SeguranÃ§a, privacidade e LGPD](#seguranca-privacidade-e-lgpd)
-- [GovernanÃ§a de modelos](#governanca-de-modelos)
-- [Deploy e operaÃ§Ã£o](#deploy-e-operacao)
+- [Segurança, privacidade e LGPD](#seguranca-privacidade-e-lgpd)
+- [Governança de modelos](#governanca-de-modelos)
+- [Deploy e operação](#deploy-e-operacao)
 - [Roadmap](#roadmap)
-- [ContribuiÃ§Ã£o](#contribuicao)
+- [Contribuição](#contribuicao)
 - [Suporte e contato](#suporte-e-contato)
-- [LicenÃ§a](#licenca)
+- [Licença](#licenca)
 
 ---
 
-## Visao geral
-
+<a id="visao-geral"></a>
+## Visão geral
 No fluxo tradicional de ISP:
 
 1. Cliente perde sinal
 2. Cliente abre chamado
-3. Agenda tÃ©cnico
+3. Agenda técnico
 4. Alto custo operacional
 
 O **AI Network Guardian** antecipa o problema:
 
-- Detecta degradaÃ§Ã£o antes da queda completa.
+- Detecta degradação antes da queda completa.
 - Separa queda massiva de problema individual.
-- Executa autocorreÃ§Ã£o quando possÃ­vel.
+- Executa autocorreção quando possível.
 - Comunica o cliente automaticamente.
-- Agenda visita apenas quando necessÃ¡rio.
+- Agenda visita apenas quando necessário.
 - Cancela visitas quando o problema normaliza.
 - Mede economia e melhora de SLA e MTTR.
 
 ---
 
+<a id="problema-que-resolve"></a>
 ## Problema que resolve
-
-- Reduz visitas tÃ©cnicas desnecessÃ¡rias.
+- Reduz visitas técnicas desnecessárias.
 - Diminui MTTR e melhora SLA percebido.
 - Aumenta capacidade do NOC sem inflar equipe.
 - Cria previsibilidade com risco de falha por janela.
 
 ---
 
+<a id="status-do-projeto"></a>
 ## Status do projeto
-
 - Em desenvolvimento.
 - Escopo atual: POC funcional com pipeline de dados, modelos iniciais e dashboard.
-- PrÃ³ximo marco: integraÃ§Ã£o com sistemas reais de OSS/BSS.
+- Próximo marco: integração com sistemas reais de OSS/BSS.
 
 ---
 
+<a id="principais-funcionalidades"></a>
 ## Principais funcionalidades
+### Monitoramento e inteligência
 
-### Monitoramento e inteligÃªncia
+- Ingestão de dados em batch ou near real time.
+- Fontes: telemetria de sinal, status de ONU/modem, eventos de rede, histórico de chamados/OS, contexto de região e vizinhos, clima.
+- Feature Store com agregações em janelas de 5, 15 e 60 minutos, além de histórico diário e semanal.
+- Detecção de anomalias.
+- Classificação de causa provável.
+- Previsão de risco de falha.
 
-- IngestÃ£o de dados em batch ou near real time.
-- Fontes: telemetria de sinal, status de ONU/modem, eventos de rede, histÃ³rico de chamados/OS, contexto de regiÃ£o e vizinhos, clima.
-- Feature Store com agregaÃ§Ãµes em janelas de 5, 15 e 60 minutos, alÃ©m de histÃ³rico diÃ¡rio e semanal.
-- DetecÃ§Ã£o de anomalias.
-- ClassificaÃ§Ã£o de causa provÃ¡vel.
-- PrevisÃ£o de risco de falha.
+### Ações automáticas
 
-### AÃ§Ãµes automÃ¡ticas
-
-- Reboot controlado quando elegÃ­vel.
+- Reboot controlado quando elegível.
 - Abertura de incidente massivo.
-- Pausa de agendamentos em regiÃµes afetadas.
+- Pausa de agendamentos em regiões afetadas.
 - Agendamento inteligente.
-- NotificaÃ§Ã£o ao cliente.
-- ProteÃ§Ã£o de Cliente em Janela de AtivaÃ§Ã£o/MudanÃ§a (CTO).
+- Notificação ao cliente.
+- Proteção de Cliente em Janela de Ativação/Mudança (CTO).
 
-### OperaÃ§Ã£o e gestÃ£o
+### Operação e gestão
 
 Dashboard com:
 
 - Fila de clientes em risco.
-- Heatmap por regiÃ£o.
+- Heatmap por região.
 - Incidentes ativos.
-- Auditoria das decisÃµes da IA.
+- Auditoria das decisões da IA.
 - Economia estimada.
-- MÃ©tricas de SLA e MTTR.
+- Métricas de SLA e MTTR.
 
 ---
 
+<a id="arquitetura"></a>
 ## Arquitetura
-
 Stack sugerida:
 
 - Data e ETL: Python
@@ -119,19 +119,19 @@ Stack sugerida:
 
 ---
 
+<a id="fluxogramas"></a>
 ## Fluxogramas
-
 ### 1) Fluxo geral
 
 ```mermaid
 flowchart TB
-  A[Ingestao de dados] --> B[Camada Raw]
+  A[Ingestão de dados] --> B[Camada Raw]
   B --> C[Camada Silver]
   C --> D[Feature Store]
   D --> E[ML Core]
   E --> F[Decision Engine]
-  F --> G[Acoes automaticas]
-  F --> H[Notificacoes]
+  F --> G[Ações automaticas]
+  F --> H[Notificações]
   E --> I[Dashboard]
   F --> I
   G --> J[Feedback Loop]
@@ -140,13 +140,13 @@ flowchart TB
 
 ---
 
-### 2) Fluxo de decisao
+### 2) Fluxo de decisão
 
 ```mermaid
 flowchart TD
   S[Evento cliente offline] --> F1[Calcular features]
   F1 --> M1[Modelo anomalia]
-  F1 --> M2[Modelo classificacao]
+  F1 --> M2[Modelo classificação]
   F1 --> M3[Modelo risco]
 
   M2 -->|Massiva alta| X1[Verificar cluster vizinhos]
@@ -168,23 +168,23 @@ flowchart TD
 
 ---
 
-### 2.1) Fluxo de economia e prevenção
+### 2.1) Fluxo de economia e preveno
 
 ```mermaid
 flowchart TD
   A[Evento de rede ou cliente] --> B{Reabertura de OS <= X dias?}
-  B -->|Sim| B1[Priorizar RCA e validação técnica]
-  B -->|Não| C{Qualidade pós-ativação <= X horas?}
-  C -->|Ruim| C1[Retorno preventivo antes da reclamação]
+  B -->|Sim| B1[Priorizar RCA e validao tcnica]
+  B -->|No| C{Qualidade ps-ativao <= X horas?}
+  C -->|Ruim| C1[Retorno preventivo antes da reclamao]
   C -->|Ok| D{Linha estabilizou >= X min?}
   D -->|Sim| D1[Cancelar OS e notificar cliente]
-  D -->|Não| E{Risco x impacto - SLA/cliente crítico?}
+  D -->|No| E{Risco x impacto - SLA/cliente crtico?}
   E -->|Alto| E1[Prioridade alta na fila]
   E -->|Normal| E2[Prioridade normal]
   E1 --> F{CTO/OLT reincidente?}
   E2 --> F
-  F -->|Sim| F1[Acionar manutenção preventiva]
-  F -->|Não| G[Fluxo padrão de atendimento]
+  F -->|Sim| F1[Acionar manuteno preventiva]
+  F -->|No| G[Fluxo padro de atendimento]
 ```
 
 ---
@@ -193,17 +193,9 @@ flowchart TD
 ---
 
 
-
-
-
-
-
-
-
-
 ---
 
-### 3) Sequencia monitoramento
+### 3) Sequência de monitoramento
 
 ```mermaid
 sequenceDiagram
@@ -217,7 +209,7 @@ sequenceDiagram
 
   COL->>FEAT: envia telemetria
   FEAT->>ML: envia features
-  ML->>DEC: scores e previsoes
+  ML->>DEC: scores e previsões
   DEC->>AUD: registra decisao
   DEC->>ACT: executa acao
   ACT->>AUD: resultado
@@ -289,20 +281,20 @@ flowchart LR
 
 ---
 
+<a id="modelos-de-ia"></a>
 ## Modelos de IA
-
-### DetecÃ§Ã£o de anomalia
+### Detecção de anomalia
 
 - Isolation Forest.
 - One Class SVM.
 
-SaÃ­da:
+Saída:
 
 ```
 anomaly_score
 ```
 
-### ClassificaÃ§Ã£o
+### Classificação
 
 - LightGBM ou XGBoost.
 
@@ -314,9 +306,9 @@ Classes:
 - EXTERNAL_NETWORK
 - INTERMITTENT
 
-### PrevisÃ£o de risco
+### Previsão de risco
 
-SaÃ­das:
+Saídas:
 
 ```
 risk_2h
@@ -326,54 +318,54 @@ risk_24h
 
 ---
 
+<a id="decision-engine"></a>
 ## Decision Engine
-
 Decide baseado em:
 
 - Resultados dos modelos.
 - Contexto do cliente.
-- Regras de seguranÃ§a.
+- Regras de segurança.
 - Custo esperado.
 
 Exemplo:
 
 - Massiva detectada: abrir incidente.
 - Individual: tentar reboot.
-- Queda individual na mesma CTO durante janela de ativaÃ§Ã£o/manutenÃ§Ã£o: acionar tÃ©cnico no local para corrigir antes de sair.
+- Queda individual na mesma CTO durante janela de ativação/manutenção: acionar técnico no local para corrigir antes de sair.
 - Estabilizou: cancelar OS.
 - Persistiu: agendar visita.
 
-Todas as decisÃµes sÃ£o auditadas.
+Todas as decisões são auditadas.
 
-Regra especÃ­fica:
-- ProteÃ§Ã£o de Cliente em Janela de AtivaÃ§Ã£o/MudanÃ§a (CTO): se um cliente da mesma CTO cair dentro do intervalo de inÃ­cio/fim de uma ativaÃ§Ã£o ou manutenÃ§Ã£o, o tÃ©cnico responsÃ¡vel deve validar e corrigir no local.
+Regra específica:
+- Proteção de Cliente em Janela de Ativação/Mudança (CTO): se um cliente da mesma CTO cair dentro do intervalo de início/fim de uma ativação ou manutenção, o técnico responsável deve validar e corrigir no local.
 
 ---
 
-## Estrutura do repositorio
-
+<a id="estrutura-do-repositorio"></a>
+## Estrutura do repositório
 ```
 ai-network-guardian/
-ââ apps/
-â  ââ api/
-â  ââ dashboard/
-ââ services/
-â  ââ collectors/
-â  ââ feature-store/
-â  ââ ml-core/
-â  ââ decision-engine/
-â  ââ action-service/
-â  ââ notification-service/
-ââ infra/
-ââ docs/
-ââ notebooks/
-ââ README.md
+├─ apps/
+│  ├─ api/
+│  └─ dashboard/
+├─ services/
+│  ├─ collectors/
+│  ├─ feature-store/
+│  ├─ ml-core/
+│  ├─ decision-engine/
+│  ├─ action-service/
+│  └─ notification-service/
+├─ infra/
+├─ docs/
+├─ notebooks/
+└─ README.md
 ```
 
 ---
 
+<a id="banco-de-dados"></a>
 ## Banco de dados
-
 Tabelas principais:
 
 - telemetry_raw
@@ -389,8 +381,8 @@ Tabelas principais:
 
 ---
 
+<a id="api"></a>
 ## API
-
 Endpoints:
 
 ```
@@ -405,20 +397,20 @@ GET /metrics/kpis
 
 ---
 
+<a id="dashboard"></a>
 ## Dashboard
-
 Telas:
 
 - NOC Overview.
 - Fila de risco.
-- DossiÃª do cliente.
+- Dossiê do cliente.
 - KPIs e economia.
 - Explainability.
 
 ---
 
-## Metricas e economia
-
+<a id="metricas-e-economia"></a>
+## Métricas e economia
 KPIs:
 
 - Precision e Recall.
@@ -434,19 +426,19 @@ economia = OS_evitadas * custo_medio_visita
 
 ---
 
+<a id="outras-alavancas-de-economia"></a>
 ## Outras alavancas de economia
-
-- DetecÃ§Ã£o de retorno de OS: se um cliente reabre OS em atÃ© X dias, prioriza anÃ¡lise de causa raiz e evita visitas repetidas.
-- Prioridade inteligente de fila: ordena visitas por risco e impacto (clientes crÃ­ticos, empresas, SLA premium).
-- PrÃ©-diagnÃ³stico antes da visita: testes remotos automÃ¡ticos e checklist do tÃ©cnico com provÃ¡vel causa.
-- Cancelamento automÃ¡tico de OS: se a linha estabilizar por X minutos, cancela e notifica o cliente.
-- Controle de reincidÃªncia por CTO/OLT: identifica CTOs que caem com frequÃªncia e indica manutenÃ§Ã£o preventiva.
-- Monitoramento de qualidade pÃ³s-ativaÃ§Ã£o: sinal ruim nas primeiras X horas aciona retorno preventivo do tÃ©cnico.
+- Detecção de retorno de OS: se um cliente reabre OS em até X dias, prioriza análise de causa raiz e evita visitas repetidas.
+- Prioridade inteligente de fila: ordena visitas por risco e impacto (clientes críticos, empresas, SLA premium).
+- Pré-diagnóstico antes da visita: testes remotos automáticos e checklist do técnico com provável causa.
+- Cancelamento automático de OS: se a linha estabilizar por X minutos, cancela e notifica o cliente.
+- Controle de reincidência por CTO/OLT: identifica CTOs que caem com frequência e indica manutenção preventiva.
+- Monitoramento de qualidade pós-ativação: sinal ruim nas primeiras X horas aciona retorno preventivo do técnico.
 
 ---
 
-## Requisitos e dependencias
-
+<a id="requisitos-e-dependencias"></a>
+## Requisitos e dependências
 - Docker.
 - Python 3.11.
 - Node 18.
@@ -454,9 +446,9 @@ economia = OS_evitadas * custo_medio_visita
 
 ---
 
-## Configuracao
-
-Crie um `.env` na raiz com os valores necessÃ¡rios. Exemplo mÃ­nimo:
+<a id="configuracao"></a>
+## Configuração
+Crie um `.env` na raiz com os valores necessários. Exemplo mínimo:
 
 ```
 ENV=dev
@@ -473,8 +465,8 @@ NOTIFICATION_PROVIDER=mock
 
 ---
 
+<a id="como-rodar-localmente"></a>
 ## Como rodar localmente
-
 Subir infra:
 
 ```
@@ -499,99 +491,99 @@ npm run dev
 
 ---
 
+<a id="testes-e-qualidade"></a>
 ## Testes e qualidade
-
-- Testes unitÃ¡rios e de integraÃ§Ã£o com `pytest`.
-- Linters e formataÃ§Ã£o: `ruff`, `black` e `isort`.
-- Cobertura mÃ­nima recomendada: 80%.
+- Testes unitários e de integração com `pytest`.
+- Linters e formatação: `ruff`, `black` e `isort`.
+- Cobertura mínima recomendada: 80%.
 
 ---
 
+<a id="observabilidade"></a>
 ## Observabilidade
-
-- Logs estruturados com correlaÃ§Ã£o por `trace_id` e `customer_id`.
-- MÃ©tricas no padrÃ£o Prometheus.
-- Alertas para aumento de risco agregado, falhas de ingestÃ£o e drift de modelo.
-
----
-
-## Seguranca, privacidade e LGPD
-
-- MinimizaÃ§Ã£o de dados pessoais.
-- PseudonimizaÃ§Ã£o de identificadores de cliente.
-- Criptografia em trÃ¢nsito (TLS) e em repouso.
-- Controle de acesso por funÃ§Ã£o (RBAC).
-- RetenÃ§Ã£o de dados com polÃ­ticas por tipo de dado.
-- Trilhas de auditoria para decisÃµes automatizadas.
+- Logs estruturados com correlação por `trace_id` e `customer_id`.
+- Métricas no padrão Prometheus.
+- Alertas para aumento de risco agregado, falhas de ingestão e drift de modelo.
 
 ---
 
-## Governanca de modelos
+<a id="seguranca-privacidade-e-lgpd"></a>
+## Segurança, privacidade e LGPD
+- Minimização de dados pessoais.
+- Pseudonimização de identificadores de cliente.
+- Criptografia em trânsito (TLS) e em repouso.
+- Controle de acesso por função (RBAC).
+- Retenção de dados com políticas por tipo de dado.
+- Trilhas de auditoria para decisões automatizadas.
 
-- Versionamento de modelos com validaÃ§Ã£o antes de produÃ§Ã£o.
+---
+
+<a id="governanca-de-modelos"></a>
+## Governança de modelos
+- Versionamento de modelos com validação antes de produção.
 - Monitoramento de drift e performance.
-- Rollback automÃ¡tico se o modelo degradar.
+- Rollback automático se o modelo degradar.
 - Registro de features e datasets usados no treino.
 
 ---
 
-## Deploy e operacao
-
+<a id="deploy-e-operacao"></a>
+## Deploy e operação
 - Ambientes: `dev`, `staging`, `prod`.
-- Pipeline CI/CD com testes e validaÃ§Ãµes.
-- Infra como cÃ³digo em `infra/`.
-- EstratÃ©gia de rollout: canary ou blue/green.
+- Pipeline CI/CD com testes e validações.
+- Infra como código em `infra/`.
+- Estratégia de rollout: canary ou blue/green.
 
 ---
 
+<a id="roadmap"></a>
 ## Roadmap
-
 ### Fase 1
 
-- Ingestao.
+- Ingestão.
 - Feature store.
 - Anomalia.
-- Dashboard bÃ¡sico.
+- Dashboard básico.
 
 ### Fase 2
 
-- PrevisÃ£o de risco.
+- Previsão de risco.
 - Explainability.
 - Economia estimada.
 
 ### Fase 3
 
-- IntegraÃ§Ãµes reais.
+- Integrações reais.
 - Monitoramento de drift.
-- OtimizaÃ§Ã£o de agendamento.
+- Otimização de agendamento.
 
 ---
 
-## Contribuicao
-
+<a id="contribuicao"></a>
+## Contribuição
 - Abra uma issue descrevendo o problema ou proposta.
-- Envie um PR com testes e documentaÃ§Ã£o atualizada.
+- Envie um PR com testes e documentação atualizada.
 
 ---
 
+<a id="suporte-e-contato"></a>
 ## Suporte e contato
-
 - Email: murylobrayan@gmail.com
 - Comercial: murylobrayan@gmail.com
 
 ---
 
-## Licenca
-
+<a id="licenca"></a>
+## Licença
 MIT ou Apache 2.0
 
 ---
 
 
 
-- DetecÃ§Ã£o de retorno de OS: se um cliente reabre OS em atÃ© X dias, prioriza anÃ¡lise de causa raiz e evita visitas repetidas.
-- Prioridade inteligente de fila: ordena visitas por risco e impacto (clientes crÃ­ticos, empresas, SLA premium).
-- PrÃ©-diagnÃ³stico antes da visita: testes remotos automÃ¡ticos e checklist do tÃ©cnico com provÃ¡vel causa.
-- Cancelamento automÃ¡tico de OS: se a linha estabilizar por X minutos, cancela e notifica o cliente.
-- Controle de reincidÃªncia por CTO/OLT: identifica CTOs que caem com frequÃªncia e indica manutenÃ§Ã£o preventiva.
-- Monitoramento de qualidade pÃ³s-ativaÃ§Ã£o: sinal ruim nas primeiras X horas aciona retorno preventivo do tÃ©cnico.
+- Detecção de retorno de OS: se um cliente reabre OS em até X dias, prioriza análise de causa raiz e evita visitas repetidas.
+- Prioridade inteligente de fila: ordena visitas por risco e impacto (clientes críticos, empresas, SLA premium).
+- Pré-diagnóstico antes da visita: testes remotos automáticos e checklist do técnico com provável causa.
+- Cancelamento automático de OS: se a linha estabilizar por X minutos, cancela e notifica o cliente.
+- Controle de reincidência por CTO/OLT: identifica CTOs que caem com frequência e indica manutenção preventiva.
+- Monitoramento de qualidade pós-ativação: sinal ruim nas primeiras X horas aciona retorno preventivo do técnico.
