@@ -522,11 +522,13 @@ npm run dev
 
 ## Suporte e contato
 
-- Email: suporte@empresa.com
-- Comercial: vendas@empresa.com
+- Email: murylobrayan@gmail.com
+- Comercial: murylobrayan@gmail.com
 
 ---
 
 ## Licenca
 
 MIT ou Apache 2.0
+
+
