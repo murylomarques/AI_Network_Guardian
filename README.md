@@ -168,24 +168,25 @@ flowchart TD
 
 ---
 
-### 2.1) Fluxo de economia e prevenção
+### 2.1) Fluxo de economia e preven??o
 
 ```mermaid
 flowchart TD
-  A[Evento de rede ou cliente] --> B{Reabertura de OS\n<= X dias?}
-  B -->|Sim| B1[Priorizar RCA e\nvalidação técnica]
-  B -->|Não| C{Qualidade pós-ativação\n<= X horas?}
-  C -->|Ruim| C1[Retorno preventivo\nantes da reclamação]
-  C -->|Ok| D{Linha estabilizou\n>= X min?}
-  D -->|Sim| D1[Cancelar OS e\nnotificar cliente]
-  D -->|Não| E{Risco x Impacto\n(SLA/cliente crítico)?}
-  E -->|Alto| E1[Prioridade alta\nna fila]
+  A[Evento de rede ou cliente] --> B{Reabertura de OS <= X dias?}
+  B -->|Sim| B1[Priorizar RCA e valida??o t?cnica]
+  B -->|N?o| C{Qualidade p?s-ativa??o <= X horas?}
+  C -->|Ruim| C1[Retorno preventivo antes da reclama??o]
+  C -->|Ok| D{Linha estabilizou >= X min?}
+  D -->|Sim| D1[Cancelar OS e notificar cliente]
+  D -->|N?o| E{Risco x impacto - SLA/cliente cr?tico?}
+  E -->|Alto| E1[Prioridade alta na fila]
   E -->|Normal| E2[Prioridade normal]
   E1 --> F{CTO/OLT reincidente?}
   E2 --> F
-  F -->|Sim| F1[Acionar manutenção\npreventiva]
-  F -->|Não| G[Fluxo padrão\nde atendimento]
+  F -->|Sim| F1[Acionar manuten??o preventiva]
+  F -->|N?o| G[Fluxo padr?o de atendimento]
 ```
+
 
 
 
