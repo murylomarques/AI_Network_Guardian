@@ -19,6 +19,7 @@
 - [API](#api)
 - [Dashboard](#dashboard)
 - [Métricas e economia](#metricas-e-economia)
+- [Outras alavancas de economia](#outras-alavancas-de-economia)
 - [Requisitos e dependências](#requisitos-e-dependencias)
 - [Configuração](#configuracao)
 - [Como rodar localmente](#como-rodar-localmente)
@@ -164,6 +165,30 @@ flowchart TD
   V1 -->|Sim| C1[Fechar caso]
   V1 -->|Nao| T0
 ```
+
+---
+
+### 2.1) Fluxo de economia e prevenção
+
+```mermaid
+flowchart TD
+  A[Evento de rede ou cliente] --> B{Reabertura de OS\n<= X dias?}
+  B -->|Sim| B1[Priorizar RCA e\nvalidação técnica]
+  B -->|Não| C{Qualidade pós-ativação\n<= X horas?}
+  C -->|Ruim| C1[Retorno preventivo\nantes da reclamação]
+  C -->|Ok| D{Linha estabilizou\n>= X min?}
+  D -->|Sim| D1[Cancelar OS e\nnotificar cliente]
+  D -->|Não| E{Risco x Impacto\n(SLA/cliente crítico)?}
+  E -->|Alto| E1[Prioridade alta\nna fila]
+  E -->|Normal| E2[Prioridade normal]
+  E1 --> F{CTO/OLT reincidente?}
+  E2 --> F
+  F -->|Sim| F1[Acionar manutenção\npreventiva]
+  F -->|Não| G[Fluxo padrão\nde atendimento]
+```
+
+
+
 
 ---
 
@@ -398,6 +423,17 @@ economia = OS_evitadas * custo_medio_visita
 
 ---
 
+## Outras alavancas de economia
+
+- Detecção de retorno de OS: se um cliente reabre OS em até X dias, prioriza análise de causa raiz e evita visitas repetidas.
+- Prioridade inteligente de fila: ordena visitas por risco e impacto (clientes críticos, empresas, SLA premium).
+- Pré-diagnóstico antes da visita: testes remotos automáticos e checklist do técnico com provável causa.
+- Cancelamento automático de OS: se a linha estabilizar por X minutos, cancela e notifica o cliente.
+- Controle de reincidência por CTO/OLT: identifica CTOs que caem com frequência e indica manutenção preventiva.
+- Monitoramento de qualidade pós-ativação: sinal ruim nas primeiras X horas aciona retorno preventivo do técnico.
+
+---
+
 ## Requisitos e dependencias
 
 - Docker.
@@ -538,7 +574,13 @@ npm run dev
 
 MIT ou Apache 2.0
 
+---
 
 
 
-
+- Detecção de retorno de OS: se um cliente reabre OS em até X dias, prioriza análise de causa raiz e evita visitas repetidas.
+- Prioridade inteligente de fila: ordena visitas por risco e impacto (clientes críticos, empresas, SLA premium).
+- Pré-diagnóstico antes da visita: testes remotos automáticos e checklist do técnico com provável causa.
+- Cancelamento automático de OS: se a linha estabilizar por X minutos, cancela e notifica o cliente.
+- Controle de reincidência por CTO/OLT: identifica CTOs que caem com frequência e indica manutenção preventiva.
+- Monitoramento de qualidade pós-ativação: sinal ruim nas primeiras X horas aciona retorno preventivo do técnico.
