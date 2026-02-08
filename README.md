@@ -1,4 +1,4 @@
-﻿# AI Network Guardian
+﻿﻿﻿# AI Network Guardian
 **Plataforma de IA para prever, diagnosticar e resolver falhas de conectividade, reduzindo custos operacionais e melhorando SLA.**
 
 > O que este projeto faz: monitora telemetria e eventos de rede, detecta anomalias, classifica causa provável (massiva vs individual), prevê risco de falha (2h/6h/24h), recomenda ou executa ações (reboot, abrir incidente, agendar ou cancelar visita) e exibe tudo em um dashboard com métricas de economia operacional.
@@ -168,9 +168,28 @@ flowchart TD
 
 ---
 
-### 2.1) Fluxo de economia e preven??o
+### 2.1) Fluxo de economia e prevenção
 
 ```mermaid
+flowchart TD
+  A[Evento de rede ou cliente] --> B{Reabertura de OS <= X dias?}
+  B -->|Sim| B1[Priorizar RCA e validação técnica]
+  B -->|Não| C{Qualidade pós-ativação <= X horas?}
+  C -->|Ruim| C1[Retorno preventivo antes da reclamação]
+  C -->|Ok| D{Linha estabilizou >= X min?}
+  D -->|Sim| D1[Cancelar OS e notificar cliente]
+  D -->|Não| E{Risco x impacto - SLA/cliente crítico?}
+  E -->|Alto| E1[Prioridade alta na fila]
+  E -->|Normal| E2[Prioridade normal]
+  E1 --> F{CTO/OLT reincidente?}
+  E2 --> F
+  F -->|Sim| F1[Acionar manutenção preventiva]
+  F -->|Não| G[Fluxo padrão de atendimento]
+```
+
+---
+
+mermaid
 flowchart TD
   A[Evento de rede ou cliente] --> B{Reabertura de OS <= X dias?}
   B -->|Sim| B1[Priorizar RCA e valida??o t?cnica]
@@ -186,6 +205,7 @@ flowchart TD
   F -->|Sim| F1[Acionar manuten??o preventiva]
   F -->|N?o| G[Fluxo padr?o de atendimento]
 ```
+
 
 
 
