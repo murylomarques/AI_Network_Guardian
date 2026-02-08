@@ -90,6 +90,7 @@ O **AI Network Guardian** antecipa o problema:
 - Pausa de agendamentos em regiões afetadas.
 - Agendamento inteligente.
 - Notificação ao cliente.
+- Proteção de Cliente em Janela de Ativação/Mudança (CTO).
 
 ### Operação e gestão
 
@@ -153,7 +154,9 @@ flowchart TD
 
   M2 -->|Individual| I1
 
-  I1 --> R1{Pode autocorrigir}
+  I1 --> T0{Tecnico em ativacao/manutencao na CTO?}
+  T0 -->|Sim| L1[Acionar tecnico no local]
+  T0 -->|Nao| R1{Pode autocorrigir}
   R1 -->|Sim| B1[Reboot controlado]
   R1 -->|Nao| T1[Agendar tecnico]
 
@@ -300,10 +303,14 @@ Exemplo:
 
 - Massiva detectada: abrir incidente.
 - Individual: tentar reboot.
+- Queda individual na mesma CTO durante janela de ativação/manutenção: acionar técnico no local para corrigir antes de sair.
 - Estabilizou: cancelar OS.
 - Persistiu: agendar visita.
 
 Todas as decisões são auditadas.
+
+Regra específica:
+- Proteção de Cliente em Janela de Ativação/Mudança (CTO): se um cliente da mesma CTO cair dentro do intervalo de início/fim de uma ativação ou manutenção, o técnico responsável deve validar e corrigir no local.
 
 ---
 
@@ -530,5 +537,8 @@ npm run dev
 ## Licenca
 
 MIT ou Apache 2.0
+
+
+
 
 
