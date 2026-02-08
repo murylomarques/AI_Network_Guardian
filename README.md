@@ -154,15 +154,15 @@ flowchart TD
 
   M2 -->|Individual| I1
 
-  I1 --> T0{Tecnico em ativacao/manutencao na CTO?}
-  T0 -->|Sim| L1[Acionar tecnico no local]
-  T0 -->|Nao| R1{Pode autocorrigir}
+  I1 --> R1{Pode autocorrigir?}
   R1 -->|Sim| B1[Reboot controlado]
-  R1 -->|Nao| T1[Agendar tecnico]
+  R1 -->|Nao| T0{Tecnico em ativacao/manutencao na CTO?}
+  T0 -->|Sim| L1[Acionar tecnico no local]
+  T0 -->|Nao| T1[Agendar tecnico]
 
-  B1 --> V1{Estabilizou}
+  B1 --> V1{Estabilizou?}
   V1 -->|Sim| C1[Fechar caso]
-  V1 -->|Nao| T1
+  V1 -->|Nao| T0
 ```
 
 ---
