@@ -187,10 +187,6 @@ flowchart TD
   F -->|No| G[Fluxo padro de atendimento]
 ```
 
----
-
-
----
 
 
 ---
