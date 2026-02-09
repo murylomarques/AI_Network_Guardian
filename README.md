@@ -77,7 +77,8 @@ O **AI Network Guardian** antecipa o problema:
 ### Monitoramento e inteligência
 
 - Ingestão de dados em batch ou near real time.
-- Fontes: telemetria de sinal, status de ONU/modem, eventos de rede, histórico de chamados/OS, contexto de região e vizinhos, clima.
+- Fontes (a definir em levantamento): telemetria de sinal, status de ONU/modem, eventos de rede, histórico de chamados/OS, contexto de região e vizinhos, clima.
+- Entrada via webhook para normalizar e registrar eventos.
 - Feature Store com agregações em janelas de 5, 15 e 60 minutos, além de histórico diário e semanal.
 - Detecção de anomalias.
 - Classificação de causa provável.
@@ -107,11 +108,14 @@ Dashboard com:
 
 <a id="arquitetura"></a>
 ## Arquitetura
-Stack sugerida:
+Stack sugerida (ajustável):
 
 - Data e ETL: Python
-- Stream: Redis Streams ou RabbitMQ
-- Banco: PostgreSQL ou MySQL
+- Orquestração: n8n (webhooks + fluxos)
+- Stream: Redis Streams ou RabbitMQ (opcional)
+- Memória rápida: Redis
+- Storage histórico/analytics: object storage (S3/MinIO)
+- Banco relacional (opcional): PostgreSQL ou MySQL
 - API: FastAPI ou Laravel
 - ML: scikit-learn, LightGBM ou XGBoost
 - Frontend: React + Tailwind
@@ -361,7 +365,13 @@ ai-network-guardian/
 
 <a id="banco-de-dados"></a>
 ## Banco de dados
-Tabelas principais:
+Estratégia de dados:
+
+- Histórico e analytics em object storage (alto volume).
+- Memória rápida em Redis.
+- Banco relacional opcional para operações e relatórios.
+
+Se usar banco relacional, tabelas principais:
 
 - telemetry_raw
 - events_raw
@@ -514,6 +524,7 @@ npm run dev
 - Controle de acesso por função (RBAC).
 - Retenção de dados com políticas por tipo de dado.
 - Trilhas de auditoria para decisões automatizadas.
+- Antes de publicar/compartilhar, validar política interna e termos de confidencialidade.
 
 ---
 
@@ -570,12 +581,3 @@ npm run dev
 MIT ou Apache 2.0
 
 ---
-
-
-
-- Detecção de retorno de OS: se um cliente reabre OS em até X dias, prioriza análise de causa raiz e evita visitas repetidas.
-- Prioridade inteligente de fila: ordena visitas por risco e impacto (clientes críticos, empresas, SLA premium).
-- Pré-diagnóstico antes da visita: testes remotos automáticos e checklist do técnico com provável causa.
-- Cancelamento automático de OS: se a linha estabilizar por X minutos, cancela e notifica o cliente.
-- Controle de reincidência por CTO/OLT: identifica CTOs que caem com frequência e indica manutenção preventiva.
-- Monitoramento de qualidade pós-ativação: sinal ruim nas primeiras X horas aciona retorno preventivo do técnico.
