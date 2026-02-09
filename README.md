@@ -128,17 +128,20 @@ Stack sugerida (ajustável):
 
 ```mermaid
 flowchart TB
-  A[Ingestão de dados] --> B[Camada Raw]
-  B --> C[Camada Silver]
-  C --> D[Feature Store]
-  D --> E[ML Core]
-  E --> F[Decision Engine]
-  F --> G[Ações automaticas]
-  F --> H[Notificações]
-  E --> I[Dashboard]
-  F --> I
-  G --> J[Feedback Loop]
-  J --> D
+  A[Webhook Ingestão] --> B[n8n Orquestrador]
+  B --> C[Camada Raw]
+  C --> D[Camada Silver]
+  D --> E[Feature Store]
+  E --> F[Agente Detecção]
+  F --> G[Agente Classificação]
+  G --> H[Agente Risco]
+  H --> I[Agente Decisão]
+  I --> J[Ações automáticas]
+  I --> K[Notificações]
+  H --> L[Dashboard]
+  I --> L
+  J --> M[Feedback Loop]
+  M --> E
 ```
 
 ---
@@ -147,10 +150,11 @@ flowchart TB
 
 ```mermaid
 flowchart TD
-  S[Evento cliente offline] --> F1[Calcular features]
-  F1 --> M1[Modelo anomalia]
-  F1 --> M2[Modelo classificação]
-  F1 --> M3[Modelo risco]
+  S[Evento via webhook] --> N8N[n8n Orquestrador]
+  N8N --> F1[Calcular features]
+  F1 --> M1[Agente anomalia]
+  F1 --> M2[Agente classificação]
+  F1 --> M3[Agente risco]
 
   M2 -->|Massiva alta| X1[Verificar cluster vizinhos]
   X1 -->|Cluster alto| A1[Abrir incidente massivo]
@@ -198,17 +202,24 @@ flowchart TD
 
 ```mermaid
 sequenceDiagram
-  participant COL as Collector
+  participant WH as Webhook
+  participant N8N as n8n
   participant FEAT as FeatureStore
-  participant ML as MLCore
-  participant DEC as DecisionEngine
+  participant DET as AgenteDeteccao
+  participant CLS as AgenteClassificacao
+  participant RSK as AgenteRisco
+  participant DEC as AgenteDecisao
   participant ACT as ActionService
   participant AUD as AuditLog
   participant UI as Dashboard
 
-  COL->>FEAT: envia telemetria
+  WH->>N8N: envia evento
+  N8N->>FEAT: normaliza e registra
   FEAT->>ML: envia features
-  ML->>DEC: scores e previsões
+  FEAT->>DET: features
+  DET->>CLS: score anomalia
+  CLS->>RSK: classe provável
+  RSK->>DEC: scores e previsões
   DEC->>AUD: registra decisao
   DEC->>ACT: executa acao
   ACT->>AUD: resultado
@@ -229,25 +240,30 @@ flowchart LR
   end
 
   subgraph Ingestion
-    C1[Collectors]
-    Q1[Queue]
+    W1[Webhook]
+    N1[n8n]
+    Q1[Queue opcional]
   end
 
   subgraph Storage
     R[Raw]
     SI[Silver]
     FS[Feature Store]
-    DB1[DB Operacional]
-    DB2[DB Analytics]
+    RS[Redis]
+    ST[Object Storage]
+    DB1[DB Operacional opcional]
+    DB2[DB Analytics opcional]
   end
 
   subgraph Intelligence
-    ML[ML Core]
+    AD[Agente Detecção]
+    AC[Agente Classificação]
+    AR[Agente Risco]
     DR[Drift Monitor]
   end
 
   subgraph Decision
-    DE[Decision Engine]
+    DE[Agente Decisão]
     AS[Action Service]
     NS[Notification Service]
     AL[Audit Log]
@@ -258,16 +274,19 @@ flowchart LR
     UI[Dashboard]
   end
 
-  S1 --> C1
-  S2 --> C1
-  S3 --> C1
-  S4 --> C1
-  C1 --> Q1
+  S1 --> W1
+  S2 --> W1
+  S3 --> W1
+  S4 --> W1
+  W1 --> N1
+  N1 --> Q1
   Q1 --> R
   R --> SI
   SI --> FS
-  FS --> ML
-  ML --> DE
+  FS --> AD
+  AD --> AC
+  AC --> AR
+  AR --> DE
   DE --> AS
   DE --> NS
   DE --> AL
@@ -275,7 +294,9 @@ flowchart LR
   API --> DB2
   UI --> API
   AL --> DB2
-  DR --> ML
+  DR --> AD
+  DR --> AC
+  DR --> AR
 ```
 
 ---
