@@ -29,7 +29,6 @@
 - [Governança de modelos](#governanca-de-modelos)
 - [Deploy e operação](#deploy-e-operacao)
 - [Roadmap](#roadmap)
-- [Contribuição](#contribuicao)
 - [Suporte e contato](#suporte-e-contato)
 - [Licença](#licenca)
 
@@ -420,6 +419,10 @@ Economia:
 economia = OS_evitadas * custo_medio_visita
 ```
 
+Premissas:
+- Custo médio de manutenção: R$90.
+- Média de 2.000 reparos por dia.
+
 ---
 
 <a id="outras-alavancas-de-economia"></a>
@@ -552,13 +555,6 @@ npm run dev
 - Integrações reais.
 - Monitoramento de drift.
 - Otimização de agendamento.
-
----
-
-<a id="contribuicao"></a>
-## Contribuição
-- Abra uma issue descrevendo o problema ou proposta.
-- Envie um PR com testes e documentação atualizada.
 
 ---
 
