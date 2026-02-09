@@ -283,10 +283,14 @@ flowchart LR
   Q1 --> R
   R --> SI
   SI --> FS
+  R --> ST
+  SI --> ST
   FS --> AD
+  FS --> RS
   AD --> AC
   AC --> AR
   AR --> DE
+  DE --> RS
   DE --> AS
   DE --> NS
   DE --> AL
@@ -294,6 +298,7 @@ flowchart LR
   API --> DB2
   UI --> API
   AL --> DB2
+  ST --> DB2
   DR --> AD
   DR --> AC
   DR --> AR
